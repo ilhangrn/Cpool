@@ -1,2 +1,2 @@
 # CPool
-This is project for creating useful functions, libraries and guides in C.
+Project to bring up useful functions, libraries and guides in C.
