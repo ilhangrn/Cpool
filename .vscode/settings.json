@@ -1,5 +1,5 @@
 {
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": false,
     "clang-format.executable": ""c:\\Program Files\\LLVM\\bin\\clang-format.exe"",
     "clang-format.language.c.enable": true,
     "clang-format.style": "file",
