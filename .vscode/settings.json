@@ -1,11 +1,6 @@
 {
-    "files.associations": {
-        "dw1001_dev.h": "c",
-        "app_timer.h": "c",
-        "boards.h": "c"
-    },
     "editor.formatOnSave": true,
-    "clang-format.executable": ""C:\Program Files\LLVM\share\clang\clang-format.py"",
+    "clang-format.executable": ""c:\\Program Files\\LLVM\\bin\\clang-format.exe"",
     "clang-format.language.c.enable": true,
-    "clang-format.style": ""barc.clang-format""
+    "clang-format.style": "file",
 }
