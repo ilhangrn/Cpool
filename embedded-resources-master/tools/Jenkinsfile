@@ -1,0 +1,205 @@
+#!groovy
+@Library('jenkins-pipeline-lib') _
+
+pipeline
+{
+  agent any
+  environment
+  {
+    GIT_CHANGE_LOG = gitChangeLog(currentBuild.changeSets)
+  }
+  triggers
+  {
+    //At 04:00 on every day-of-week from Monday through Friday.
+    pollSCM('H 4 * * 1-5')
+  }
+  stages
+  {
+    stage('Setup')
+    {
+      steps
+      {
+        echo 'Removing existing build outputs'
+        sh 'make distclean'
+      }
+    }
+    stage('Build for Clang')
+    {
+      steps
+      {
+        sh 'make'
+      }
+      post
+      {
+        always
+        {
+          recordIssues(
+            healthy: 5,
+            unhealthy: 10,
+            aggregatingResults: true,
+            sourceDirectory: 'buildresults/',
+            filters: [
+              excludeFile('../subprojects/*'),
+              excludeFile('../interview/bad.c')
+            ],
+            qualityGates: [
+              // 3 new issue: unstable
+              [threshold: 3, type: 'DELTA', unstable: true],
+              // 5 new issues: failed build
+              [threshold: 5, type: 'DELTA', unstable: false],
+              // 10 total issues: unstable
+              [threshold: 10, type: 'TOTAL', unstable: true],
+              // 20 total issues: fail
+              [threshold: 20, type: 'TOTAL', unstable: false]
+            ],
+            tools: [
+              clang(),
+            ]
+          )
+        }
+      }
+    }
+    stage('Build for GCC-9')
+    {
+      steps
+      {
+        sh 'make NATIVE=gcc-9 BUILDRESULTS=buildresults/gcc-9'
+      }
+      post
+      {
+        always
+        {
+          recordIssues(
+            healthy: 5,
+            unhealthy: 10,
+            aggregatingResults: true,
+            sourceDirectory: 'buildresults/gcc-9',
+            filters: [
+              excludeFile('../../subprojects/*'),
+              excludeFile('../../interview/bad.c')
+            ],
+            qualityGates: [
+              // 3 new issue: unstable
+              [threshold: 3, type: 'DELTA', unstable: true],
+              // 5 new issues: failed build
+              [threshold: 5, type: 'DELTA', unstable: false],
+              // 10 total issues: unstable
+              [threshold: 10, type: 'TOTAL', unstable: true],
+              // 20 total issues: fail
+              [threshold: 20, type: 'TOTAL', unstable: false]
+            ],
+            tools: [
+              gcc(id:'gcc-9', name: 'gcc-9'),
+            ]
+          )
+        }
+      }
+    }
+    stage('Build for GCC-8')
+    {
+      steps
+      {
+        sh 'make NATIVE=gcc-8 BUILDRESULTS=buildresults/gcc-8'
+      }
+      post
+      {
+        always
+        {
+          recordIssues(
+            healthy: 5,
+            unhealthy: 10,
+            aggregatingResults: true,
+            sourceDirectory: 'buildresults/gcc-8/',
+            filters: [
+              excludeFile('../../subprojects/*'),
+              excludeFile('../../interview/bad.c')
+            ],
+            qualityGates: [
+              // 3 new issue: unstable
+              [threshold: 3, type: 'DELTA', unstable: true],
+              // 5 new issues: failed build
+              [threshold: 5, type: 'DELTA', unstable: false],
+              // 10 total issues: unstable
+              [threshold: 10, type: 'TOTAL', unstable: true],
+              // 20 total issues: fail
+              [threshold: 20, type: 'TOTAL', unstable: false]
+            ],
+            tools: [
+              gcc(id: 'gcc-8', name: 'gcc-8'),
+            ]
+          )
+        }
+      }
+    }
+    stage('Build for GCC-7')
+    {
+      steps
+      {
+        sh 'make NATIVE=gcc-7 BUILDRESULTS=buildresults/gcc-7'
+      }
+      post
+      {
+        always
+        {
+          recordIssues(
+            healthy: 5,
+            unhealthy: 10,
+            aggregatingResults: true,
+            sourceDirectory: 'buildresults/gcc-7',
+            filters: [
+              excludeFile('../../subprojects/*'),
+              excludeFile('../../interview/bad.c')
+            ],
+            qualityGates: [
+              // 3 new issue: unstable
+              [threshold: 3, type: 'DELTA', unstable: true],
+              // 5 new issues: failed build
+              [threshold: 5, type: 'DELTA', unstable: false],
+              // 10 total issues: unstable
+              [threshold: 10, type: 'TOTAL', unstable: true],
+              // 20 total issues: fail
+              [threshold: 20, type: 'TOTAL', unstable: false]
+            ],
+            tools: [
+              gcc(id: 'gcc-7', name: 'gcc-7'),
+            ]
+          )
+        }
+      }
+    }
+    stage('Test')
+    {
+      steps
+      {
+        sh 'make test'
+      }
+      post
+      {
+        always
+        {
+          junit 'buildresults/test/*.xml'
+        }
+      }
+    }
+  }
+  post
+  {
+    always
+    {
+      // Report Status
+      slackNotify(currentBuild.currentResult)
+    }
+    failure
+    {
+      /*
+      * This job does not have a GitHub configuration,
+      * so we need to create a dummy config
+      */
+      githubSetConfig('4c01f168-ca25-483e-bc6d-8d105fc5fb70')
+      githubFileIssue()
+      // Report Status
+      slackNotify(currentBuild.currentResult)
+      emailNotify(currentBuild.currentResult)
+    }
+  }
+}

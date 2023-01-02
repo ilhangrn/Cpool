@@ -7,5 +7,5 @@
     "editor.formatOnSave": true,
     "clang-format.executable": ""C:\Program Files\LLVM\share\clang\clang-format.py"",
     "clang-format.language.c.enable": true,
-    "clang-format.style": "".vscode\abc.clang-format"",
+    "clang-format.style": ""barc.clang-format""
 }
