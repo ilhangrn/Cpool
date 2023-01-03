@@ -68,3 +68,15 @@ dkms.conf
 
 # Arm project user dependant file 
 ./examples/*/*.uvguix.*
+*.sublime-workspace
+*.out
+*.o
+*.a
+*.bin
+**/buildresults/**/*
+**/build/gen/**
+.DS_Store
+
+# Meson subprojects
+**/subprojects/**
+!**/subprojects/*.wrap
