@@ -11,7 +11,7 @@
  * @return The value of the sum.
  */
 int
-sum(int a; int b)
+sum(int a, int b)
 {
     int c = 0;
     c     = a + b;
