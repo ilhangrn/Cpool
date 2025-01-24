@@ -13,9 +13,9 @@ project('Embedded Resources',
 #########################
 
 # Pick up our common compiler variables + desired_*_flags variables
-subdir('build/compiler')
-subdir('build/compiler/c')
-subdir('build/compiler/cpp')
+subdir('meson/compiler')
+subdir('meson/compiler/c')
+subdir('meson/compiler/cpp')
 
 add_project_arguments('-Wno-unknown-pragmas', language: ['cpp', 'c'])
 
@@ -35,12 +35,19 @@ if get_option('enable-pedantic-error') == true
 	add_project_arguments('-pedantic-error', language : ['cpp', 'c'])
 endif
 
+###############
+# Subprojects #
+###############
+
+etl = subproject('etl')
+etl_dep = etl.get_variable('etl_dep')
+
 #################
 # Build Modules #
 #################
 
-subdir('build/linker/linker-map')
-subdir('build/test/cmocka')
+subdir('meson/linker/linker-map')
+subdir('meson/test/cmocka')
 
 # Pre-declare these variables here so that we can add files to the list
 # throughout the source tree, passing them to the test tree later.
@@ -57,26 +64,26 @@ subdir('test')
 
 # Defined after source folders so catch2_dep is fully populated
 # when creating the built-in targets
-subdir('build/test/catch2')
+subdir('meson/test/catch2')
 
 ###################
 # Tooling Modules #
 ###################
 
 clangformat_targets = [
-	meson.source_root() / 'examples',
-	meson.source_root() / 'interview',
-	meson.source_root() / 'test',
+	meson.project_source_root() / 'examples',
+	meson.project_source_root() / 'interview',
+	meson.project_source_root() / 'test',
 ]
 
 clangformat_excludes = [
-	meson.source_root() / 'examples/cpp/etl',
-	meson.source_root() / 'examples/rtos',
-	meson.source_root() / 'examples/libcpp',
+	meson.project_source_root() / 'examples/cpp/etl',
+	meson.project_source_root() / 'examples/rtos',
+	meson.project_source_root() / 'examples/libcpp',
 ]
 
-subdir('build/analysis/clang-tidy')
-subdir('build/analysis/complexity')
-subdir('build/analysis/cppcheck')
-subdir('build/analysis/sloccount')
-subdir('build/format')
+subdir('meson/analysis/clang-tidy')
+subdir('meson/analysis/complexity')
+subdir('meson/analysis/cppcheck')
+subdir('meson/analysis/sloccount')
+subdir('meson/format')
