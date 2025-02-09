@@ -30,4 +30,25 @@ ceedling module:create[printer]
     - test/test_printer.c test functions for printer module
     - build/ directory with logs, test folders, cmock and unity frameworks. With their meson files for building.
 
-> 
+> Was life this easy before. Why did we struggle that much. Just in one minute, i have written a sum function and tested it for three cases. All we do:
+1. Declaration of it in header
+```c
+int sum(int a, int b);
+```
+
+2. Definition in source
+```c
+int sum(int a, int b)
+{
+    return 2 * ( a + b);
+}
+```
+
+3.Adding tests to test_printer.c file like this `TEST_ASSERT_EQUAL_INT(6, sum(1,2))`
+
+> Then we call
+```sh
+ceedling test:all
+```
+
+> This gives us test result. We tested a c code in seconds. Without gcc blabla things :)
