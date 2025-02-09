@@ -52,3 +52,26 @@ ceedling test:all
 ```
 
 > This gives us test result. We tested a c code in seconds. Without gcc blabla things :)
+
+> Here report: We have 3 tests but it says passed 1, and failed in 1. Because it does not continue when hits fail. We didn't have to write main function.
+
+```yml
+:source:
+  :file: test/test_printer.c
+  :dirname: test
+  :basename: test_printer.c
+:successes: []
+:failures:
+- :test: test_printer_sum_operation
+  :line: 20
+  :message: Expected 6 Was 8
+  :unity_test_time: 0
+:ignores: []
+:counts:
+  :total: 1
+  :passed: 0
+  :failed: 1
+  :ignored: 0
+:stdout: []
+:time: 0.1426029999856837
+```

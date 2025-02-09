@@ -15,7 +15,7 @@ char* GlobalOrderError;
 /*=======External Functions This Runner Calls=====*/
 extern void setUp(void);
 extern void tearDown(void);
-extern void test_printer_NeedToImplement(void);
+extern void test_printer_sum_operation(void);
 
 
 /*=======Mock Management=====*/
@@ -87,7 +87,7 @@ static void run_test(UnityTestFunction func, const char* name, UNITY_LINE_TYPE l
     {
       UnityPrint("test_printer.");
       UNITY_PRINT_EOL();
-      UnityPrint("  test_printer_NeedToImplement");
+      UnityPrint("  test_printer_sum_operation");
       UNITY_PRINT_EOL();
       return 0;
     }
@@ -95,7 +95,7 @@ static void run_test(UnityTestFunction func, const char* name, UNITY_LINE_TYPE l
   }
 #endif
   UnityBegin("test_printer.c");
-  run_test(test_printer_NeedToImplement, "test_printer_NeedToImplement", 16);
+  run_test(test_printer_sum_operation, "test_printer_sum_operation", 16);
 
   return UNITY_END();
 }
