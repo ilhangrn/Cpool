@@ -75,3 +75,5 @@ ceedling test:all
 :stdout: []
 :time: 0.1426029999856837
 ```
+
+> A good practice is having one assertion for each test. But i believe each test should be for one behaviour. So we can place several assertions to verify behaviour.
